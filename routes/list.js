@@ -1,8 +1,8 @@
 var express = require('express');
-const { getStudentsList } = require('../controller/getStudentList');
+const { getList } = require('../controller/getList');
 var router = express.Router();
 
 /* GET students. */
-router.get('/list', getStudentsList);
+router.get('/list', getList);
 
 module.exports = router;
