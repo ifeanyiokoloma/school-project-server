@@ -1,61 +1,52 @@
-const { connectDB } = require("./DB/connect");
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
+// var createError = require("http-errors");
+const express = require("express");
+// require("express-async-errors");
+const cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const cors = require("cors");
+const helmet = require("helmet")
 
-var index = require("./routes/index");
-var list = require("./routes/list");
+const list = require("./routes/list");
 const register = require("./routes/register");
-var students = require("./routes/students");
-var search = require("./routes/search");
+const students = require("./routes/students");
+const notFound = require("./middleware/notFound");
+const errorHandlerMiddleware = require("./middleware/errorHandler");
+const options = require("./config/options");
+const credentials = require("./middleware/credentials");
+
+// const notFound = require("./middleware/not-found");
 require("dotenv").config()
 
-var app = express();
+const app = express();
 
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "jade");
+// Add security headers
+app.use(helmet());
+
+// Handle options credentials check - before CORS!
+// and fetch cookies credentials requirement
+app.use(credentials)
+
+// Enable CORS
+app.use(cors(options));
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", index);
 app.use("/", list);
 app.use("/", register);
 app.use("/", students);
-app.use("/query", search);
+
+app.use(notFound);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
+// app.use(function (req, res, next) {
+//   next(createError(404));
+// });
 
 // error handler
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+app.use(errorHandlerMiddleware);
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render("error");
-});
-
-
-const start = async () => {
-  try {
-    await connectDB(process.env.MONGODB_URI);
-    console.log("DB connected");
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-start()
 
 module.exports = app;

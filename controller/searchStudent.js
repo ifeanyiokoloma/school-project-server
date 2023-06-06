@@ -2,8 +2,15 @@ const { createCustomErr } = require("../errors/customErrors");
 const asyncWrapper = require("../middleware/asyncWrapper");
 const { Student } = require("../models/studentSchema");
 
-const getStudent = asyncWrapper(async (req, res, next) => {
-  const student = await Student.findOne({ regno: req.params.regno });
+const searchStudent = asyncWrapper(async (req, res, next) => {
+  const { name } = req.query;
+  const student = await Student.find({
+    $or: [
+      { fname: { $regex: name, $options: "i" } },
+      { mname: { $regex: name, $options: "i" } },
+      { sname: { $regex: name, $options: "i" } },
+    ],
+  });
   if (!student) {
     const error = createCustomErr(
       `No student with the registration number: ${req.params.regno}`,
@@ -15,4 +22,4 @@ const getStudent = asyncWrapper(async (req, res, next) => {
   res.status(200).json(student);
 });
 
-module.exports = getStudent;
+module.exports = searchStudent;

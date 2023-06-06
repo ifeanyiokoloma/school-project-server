@@ -1,17 +1,18 @@
+const { createCustomErr } = require("../errors/customErrors");
+const asyncWrapper = require("../middleware/asyncWrapper");
 const { Student } = require("../models/studentSchema");
 
-const deleteStudent = async (req, res, next) => {
-  try {
-    const student = await Student.findOneAndDelete({ regno: req.params.regno });
-    if (!student) {
-      return res.status(404).json({
-        msg: `No student with the registration number: ${req.params.regno}`,
-      });
-    }
-    res.status(200).json({task: null, status: "success"});
-  } catch (err) {
-    res.status(500).json({ msg: err });
+const deleteStudent = asyncWrapper(async (req, res, next) => {
+  const student = await Student.findOneAndDelete({ regno: req.params.regno });
+  if (!student) {
+    const error = createCustomErr(
+      `No student with the registration number: ${req.params.regno}`,
+      404
+    );
+
+    return next(error);
   }
-};
+  res.status(200).json({ task: null, status: "success" });
+});
 
 module.exports = deleteStudent;
