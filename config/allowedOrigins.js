@@ -1,4 +1,4 @@
-const allowedOrigins = ["fstc-awka.netlify.app"];
+const allowedOrigins = ["https://fstc-awka.netlify.app"];
 
 
 module.exports = allowedOrigins
