@@ -56,7 +56,6 @@ const studentSchema = new mongoose.Schema({
     values: ["Ezeuzu", "Enukorah", "Borishade", "Governor", "Unity"],
     message: "{VALUE} is not supported",
   },
-  dob: { type: String, required: true },
   gender: {
     type: String,
     required: true,
