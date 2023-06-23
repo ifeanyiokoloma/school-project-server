@@ -64,7 +64,7 @@ const studentSchema = new mongoose.Schema({
   regno: { type: String, required: true, trim: true },
   regdate: { type: Date, required: true, default: new Date() },
   resumption: { type: Date },
-  faceID: { type: String, required: true },
+  faceID: { type: String },
 });
 
 const Student = mongoose.model("Student", studentSchema);
