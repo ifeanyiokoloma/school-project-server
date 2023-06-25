@@ -3,7 +3,7 @@ const asyncWrapper = require("../middleware/asyncWrapper");
 const { Student } = require("../models/studentSchema");
 
 const getStudent = asyncWrapper(async (req, res, next) => {
-  const student = await Student.findOne({ regno: req.params.faceID });
+  const student = await Student.findOne({ faceID: req.params.faceID });
   if (!student) {
     const error = createCustomErr(
       `No such student exist: ${req.params.faceID}`,
