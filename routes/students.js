@@ -7,7 +7,7 @@ var router = express.Router();
 
 /* GET student */
 router
-  .route("/students/:regno")
+  .route("/students/:faceID")
   .get(getStudent)
   .delete(deleteStudent)
   .patch(updateStudent);

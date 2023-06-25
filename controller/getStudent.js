@@ -3,10 +3,10 @@ const asyncWrapper = require("../middleware/asyncWrapper");
 const { Student } = require("../models/studentSchema");
 
 const getStudent = asyncWrapper(async (req, res, next) => {
-  const student = await Student.findOne({ regno: req.params.regno });
+  const student = await Student.findOne({ regno: req.params.faceID });
   if (!student) {
     const error = createCustomErr(
-      `No student with the registration number: ${req.params.regno}`,
+      `No such student exist: ${req.params.faceID}`,
       404
     );
 

@@ -13,7 +13,7 @@ const searchStudent = asyncWrapper(async (req, res, next) => {
   });
   if (!student) {
     const error = createCustomErr(
-      `No student with the registration number: ${req.params.regno}`,
+      `No such student exists: ${req.params.faceID}`,
       404
     );
 
